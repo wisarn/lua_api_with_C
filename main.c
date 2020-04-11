@@ -1,23 +1,29 @@
 #include <stdio.h>
-
+#include <string.h>
 #include "lua.h"
 #include "lauxlib.h"
 #include "lualib.h"
 
-void lua_example_dofile(void) {
-	// TO DO: do some magic
-	lua_State* L = luaL_newstate();
-	luaL_openlibs(L);			// include lua library in lua script
-	luaL_dofile(L,"/Users/BURL1/Documents/CProject/CProject/CProject_Test/myscript.lua");
-	lua_close(L);
-}
-
-
-int main(int argc, char **argv)
-{
+int main (void) {
+    char buff[256];
+    int error;
     
-    lua_example_dofile();
-	printf("hello world\n");
+    lua_State *L = luaL_newstate(); /* opens Lua */
+
+    luaL_openlibs(L); /* opens the standard libraries */
+
+    while (fgets(buff, sizeof(buff), stdin) != NULL) {
+        error = luaL_loadstring(L, buff) || lua_pcall(L, 0, 0, 0);
+        if (error) {
+            fprintf(stderr, "%s\n", lua_tostring(L, -1));
+            lua_pop(L, 1); /* pop error message from the stack */
+        }
+    }
+
+ //   stackDump(L);   /* traverses the stack from bottom to top, 
+ //                      printing each element according to its type.*/
     
-	return 0;
+    lua_close(L);
+    
+    return 0;
 }
