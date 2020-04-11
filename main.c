@@ -3,6 +3,7 @@
 #include "lua.h"
 #include "lauxlib.h"
 #include "lualib.h"
+#include "luaDebug.h"
 
 int main (void) {
     char buff[256];
@@ -20,8 +21,8 @@ int main (void) {
         }
     }
 
- //   stackDump(L);   /* traverses the stack from bottom to top, 
- //                      printing each element according to its type.*/
+    stackDump(L);   /* traverses the stack from bottom to top, 
+                       printing each element according to its type.*/
     
     lua_close(L);
     
